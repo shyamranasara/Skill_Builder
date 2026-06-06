@@ -1,0 +1,30 @@
+# Ignore Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore local secret environment config files
+.env
+.streamlit/secrets.toml
+.streamlit/config.toml
+*.json
+
+# We DO need to include the Firebase service account JSON for firebase-admin auth SDK.
+# Let's explicitly keep "skill-builder-26309-firebase-adminsdk-fbsvc-bf7d1079a5.json" in the container if used,
+# or we can pass it via environment variables. Since it is already in root and approved by user, we can keep it
+# or ignore it and pass details. Let's NOT ignore the service account json for now as auth relies on it,
+# but let's ignore local logs and temp files.
+!skill-builder-26309-firebase-adminsdk-fbsvc-bf7d1079a5.json
+
+# Ignore local logs and artifacts
+logs/
+*.log
+artifacts/
+.gemini/
+
+# Ignore version control and local ide settings
+.git/
+.gitignore
+.vscode/
+.idea/

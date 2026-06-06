@@ -1,0 +1,106 @@
+{
+  "Supervised Learning": {
+    "icon": "📈",
+    "subtopics": [
+      "Linear Regression: assumptions, OLS, gradient descent",
+      "Logistic Regression: sigmoid, log-loss, regularization",
+      "Decision Trees: Gini impurity, entropy, information gain, pruning",
+      "Random Forests: bagging, feature importance, OOB error",
+      "Gradient Boosting: XGBoost, LightGBM, CatBoost",
+      "Support Vector Machines: kernel trick, margin, soft-margin",
+      "K-Nearest Neighbors: distance metrics, curse of dimensionality",
+      "Naive Bayes: Gaussian, Multinomial, Bernoulli variants"
+    ]
+  },
+  "Unsupervised Learning": {
+    "icon": "🔍",
+    "subtopics": [
+      "K-Means Clustering: initialization (k-means++), elbow method",
+      "Hierarchical Clustering: agglomerative, divisive, dendrograms",
+      "DBSCAN: density-based, core points, noise",
+      "PCA: eigendecomposition, explained variance, scree plot",
+      "t-SNE: non-linear dimensionality reduction, perplexity",
+      "Autoencoders: encoder-decoder, bottleneck, anomaly detection",
+      "Gaussian Mixture Models: EM algorithm, soft assignments"
+    ]
+  },
+  "Deep Learning": {
+    "icon": "🧠",
+    "subtopics": [
+      "Neural Networks: forward pass, backpropagation, chain rule",
+      "Activation functions: ReLU, sigmoid, tanh, GELU, Swish",
+      "Optimizers: SGD, Adam, AdamW, RMSprop, learning rate scheduling",
+      "Regularization: L1/L2, dropout, batch normalization, layer normalization",
+      "CNNs: convolution, pooling, receptive field, ResNet, EfficientNet",
+      "RNNs: vanishing gradient, LSTM, GRU",
+      "Attention mechanism: self-attention, multi-head attention",
+      "Loss functions: cross-entropy, MSE, focal loss, contrastive loss"
+    ]
+  },
+  "Transformers and LLMs": {
+    "icon": "🤖",
+    "subtopics": [
+      "Transformer architecture: encoder, decoder, encoder-decoder",
+      "BERT: masked language modelling, next sentence prediction, fine-tuning",
+      "GPT series: autoregressive LM, in-context learning, few-shot",
+      "Positional encoding: sinusoidal, rotary (RoPE), ALiBi",
+      "Tokenization: BPE, WordPiece, SentencePiece",
+      "Fine-tuning: full fine-tune, LoRA, QLoRA, adapter layers",
+      "RLHF: reward model, PPO, DPO",
+      "RAG: retrieval-augmented generation, vector stores, chunking",
+      "Prompt engineering: zero-shot, few-shot, chain-of-thought"
+    ]
+  },
+  "MLOps and Deployment": {
+    "icon": "🚀",
+    "subtopics": [
+      "ML Pipelines: orchestration with Airflow, Kubeflow, Prefect",
+      "Experiment tracking: MLflow, Weights & Biases, DVC",
+      "Model serving: REST APIs (FastAPI, Flask), gRPC, TorchServe",
+      "Containerization: Docker, Kubernetes for ML workloads",
+      "CI/CD for ML: GitHub Actions, automated testing, model validation",
+      "Feature stores: Feast, Tecton, offline vs online features",
+      "Model monitoring: data drift, concept drift, performance degradation",
+      "A/B testing and shadow deployment"
+    ]
+  },
+  "Feature Engineering": {
+    "icon": "🔨",
+    "subtopics": [
+      "Handling missing values: imputation strategies, MCAR/MAR/MNAR",
+      "Categorical encoding: one-hot, label, target, ordinal encoding",
+      "Numerical transformations: log, Box-Cox, standardization, normalization",
+      "Feature selection: filter, wrapper, embedded methods",
+      "Interaction features and polynomial features",
+      "Time series features: lag features, rolling statistics, seasonality",
+      "Text features: TF-IDF, word embeddings (Word2Vec, GloVe, FastText)",
+      "Image preprocessing: resizing, normalization, augmentation"
+    ]
+  },
+  "Model Evaluation": {
+    "icon": "📊",
+    "subtopics": [
+      "Classification metrics: accuracy, precision, recall, F1, ROC-AUC, PR-AUC",
+      "Regression metrics: MAE, MSE, RMSE, R², MAPE",
+      "Cross-validation: k-fold, stratified k-fold, time-series split",
+      "Bias-variance tradeoff: underfitting, overfitting, regularization",
+      "Confusion matrix and its derived metrics",
+      "Calibration: Platt scaling, isotonic regression",
+      "Statistical tests: t-test, chi-square, ANOVA for model comparison",
+      "Fairness metrics: demographic parity, equalized odds"
+    ]
+  },
+  "Probability and Statistics for ML": {
+    "icon": "📉",
+    "subtopics": [
+      "Probability basics: joint, conditional, marginal probability",
+      "Bayes theorem and Bayesian inference",
+      "Common distributions: Normal, Bernoulli, Binomial, Poisson, Exponential",
+      "Maximum Likelihood Estimation (MLE) and MAP estimation",
+      "Central Limit Theorem and Law of Large Numbers",
+      "Hypothesis testing: p-values, Type I/II errors, power",
+      "Information theory: entropy, KL divergence, mutual information",
+      "Expectation, variance, covariance, correlation"
+    ]
+  }
+}

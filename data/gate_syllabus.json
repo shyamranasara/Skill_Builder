@@ -1,0 +1,135 @@
+{
+  "Engineering Mathematics": {
+    "icon": "📐",
+    "topics": [
+      "Discrete Mathematics: Propositional and first order logic",
+      "Discrete Mathematics: Sets, relations, functions, partial orders and lattices",
+      "Discrete Mathematics: Monoids, Groups",
+      "Discrete Mathematics: Graphs: connectivity, matching, coloring",
+      "Discrete Mathematics: Combinatorics: counting, recurrence relations, generating functions",
+      "Linear Algebra: Vectors spaces, subspaces, linear dependence and independence of vectors",
+      "Linear Algebra: Matrices, systems of linear equations, eigenvalues and eigenvectors",
+      "Linear Algebra: LU decomposition",
+      "Calculus: Limits, continuity and differentiability",
+      "Calculus: Maxima and minima",
+      "Calculus: Mean value theorem, integration",
+      "Probability and Statistics: Random variables, uniform, normal, exponential, poisson and binomial distributions",
+      "Probability and Statistics: Mean, median, mode and standard deviation",
+      "Probability and Statistics: Conditional probability and Bayes theorem"
+    ]
+  },
+  "Digital Logic": {
+    "icon": "💡",
+    "topics": [
+      "Boolean algebra",
+      "Combinational and sequential circuits",
+      "Minimization: K-map, Quine-McCluskey method",
+      "Number representations: binary, octal, hexadecimal",
+      "Computer arithmetic: fixed and floating point"
+    ]
+  },
+  "Computer Organization and Architecture": {
+    "icon": "🏗️",
+    "topics": [
+      "Machine instructions and addressing modes",
+      "ALU, data-path and control unit",
+      "Instruction pipelining: hazards, forwarding",
+      "Memory hierarchy: cache, main memory, secondary storage",
+      "Cache organization: direct mapped, set associative, fully associative",
+      "I/O interface: interrupt and DMA mode",
+      "Virtual memory: paging, segmentation, TLB"
+    ]
+  },
+  "Programming and Data Structures": {
+    "icon": "💻",
+    "topics": [
+      "Programming in C: recursion, pointers, arrays, strings",
+      "Abstract data types",
+      "Arrays, stacks, queues, linked lists",
+      "Trees: binary trees, BST, AVL trees, B-trees",
+      "Graphs: representation, BFS, DFS",
+      "Hashing: hash functions, collision resolution"
+    ]
+  },
+  "Algorithms": {
+    "icon": "⚙️",
+    "topics": [
+      "Asymptotic complexity: Big-O, Omega, Theta notation",
+      "Recurrence relations: substitution, recursion tree, master theorem",
+      "Sorting: bubble, insertion, selection, merge, quick, heap sort",
+      "Searching: linear, binary search",
+      "Divide and conquer algorithms",
+      "Greedy algorithms: activity selection, Huffman coding, Kruskal, Prim",
+      "Dynamic programming: LCS, LIS, 0/1 knapsack, matrix chain multiplication",
+      "Graph algorithms: Dijkstra, Bellman-Ford, Floyd-Warshall",
+      "NP-completeness: P vs NP, NP-hard, NP-complete problems"
+    ]
+  },
+  "Theory of Computation": {
+    "icon": "🔣",
+    "topics": [
+      "Regular languages and finite automata: DFA, NFA, epsilon-NFA",
+      "Regular expressions and regular grammars",
+      "Pumping lemma for regular languages",
+      "Context-free languages and pushdown automata",
+      "Context-free grammars: CNF, GNF",
+      "Pumping lemma for CFLs",
+      "Turing machines and decidability",
+      "Undecidability: halting problem, Rice's theorem",
+      "Recursively enumerable languages"
+    ]
+  },
+  "Compiler Design": {
+    "icon": "🔧",
+    "topics": [
+      "Lexical analysis: tokens, patterns, lexemes, LEX",
+      "Syntax analysis: top-down parsing (LL), bottom-up parsing (LR, SLR, LALR)",
+      "Syntax-directed translation",
+      "Intermediate code generation: three-address code, DAG",
+      "Runtime environments: activation records, symbol table",
+      "Code optimization: local, global, peephole",
+      "Code generation"
+    ]
+  },
+  "Operating System": {
+    "icon": "🖥️",
+    "topics": [
+      "System calls, processes, threads",
+      "CPU scheduling: FCFS, SJF, RR, priority scheduling",
+      "Concurrency: mutual exclusion, critical section, semaphores, monitors",
+      "Deadlock: conditions, prevention, avoidance (Banker's algorithm), detection",
+      "Memory management: fixed and variable partitioning, paging, segmentation",
+      "Virtual memory: demand paging, page replacement algorithms (FIFO, LRU, Optimal)",
+      "File systems: allocation methods, directory structure, inodes",
+      "I/O systems: disk scheduling (FCFS, SSTF, SCAN, C-SCAN)"
+    ]
+  },
+  "Databases": {
+    "icon": "🗄️",
+    "topics": [
+      "ER model: entities, relationships, weak entities",
+      "Relational model: keys, functional dependencies",
+      "Normalization: 1NF, 2NF, 3NF, BCNF",
+      "SQL: DDL, DML, joins, subqueries, views, triggers",
+      "Relational algebra and relational calculus",
+      "Transaction management: ACID properties",
+      "Concurrency control: locking, timestamp ordering, 2PL",
+      "Recovery: log-based recovery, checkpoints",
+      "Indexing: B-trees, B+ trees, hash indexing"
+    ]
+  },
+  "Computer Networks": {
+    "icon": "🌐",
+    "topics": [
+      "OSI and TCP/IP layered architecture",
+      "LAN technologies: Ethernet, 802.11 (WiFi)",
+      "Data link layer: framing, error detection/correction, flow control",
+      "Medium access control: CSMA/CD, CSMA/CA, ALOHA",
+      "Network layer: routing algorithms (Dijkstra, Bellman-Ford)",
+      "IP addressing: IPv4, IPv6, subnetting, CIDR",
+      "Transport layer: TCP, UDP, flow control, congestion control",
+      "Application layer: DNS, DHCP, HTTP, SMTP, FTP",
+      "Network security: basics of cryptography, SSL/TLS, firewalls"
+    ]
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "🏛️ UPSC CSE (Civil Services)": {
+    "Polity & Governance": {
+      "icon": "⚖️",
+      "topics": [
+        "Constitution of India: Preamble, Fundamental Rights, Directive Principles",
+        "Union and State Legislatures: Structure, power, privileges, functioning",
+        "Judiciary: Supreme Court, High Courts, Judicial Review, Activism",
+        "Panchayati Raj & Local Governance: 73rd and 74th Amendments",
+        "Constitutional & Statutory Bodies: Election Commission, UPSC, CAG",
+        "Public Policy & Rights Issues: Citizen's Charter, RTI, Welfare schemes"
+      ]
+    },
+    "History & Culture": {
+      "icon": "🏺",
+      "topics": [
+        "Ancient Indian History: Indus Valley, Vedic Age, Buddhism, Jainism, Mauryas",
+        "Medieval Indian History: Delhi Sultanate, Mughals, Marathas, Bhakti movement",
+        "Modern Indian History: British expansion, 1857 Revolt, Viceroy policies",
+        "Indian National Movement: Moderates, Extremists, Gandhian Era, partition",
+        "Art & Culture: Classical dances, temple architecture, music, literature"
+      ]
+    },
+    "Geography (India & World)": {
+      "icon": "🌍",
+      "topics": [
+        "Physical Geography: Geomorphology, climatology, oceanography",
+        "Indian Geography: River systems, climate, soils, vegetation, minerals",
+        "World Geography: Major regions, resources, international trade routes",
+        "Environmental Geography: Pollution, conservation, national parks, wildlife sanctuaries"
+      ]
+    },
+    "Economics & Social Development": {
+      "icon": "📈",
+      "topics": [
+        "National Income Accounting: GDP, GNP, inflation indices (CPI, WPI)",
+        "Fiscal Policy: Budgeting, GST, taxation, Finance Commission",
+        "Monetary Policy: RBI tools (Repo, Reverse Repo, CRR, SLR), banking reforms",
+        "Social Sector: Poverty estimates, employment schemes, health, education indices",
+        "International Economic Institutions: IMF, World Bank, WTO, BRICS"
+      ]
+    },
+    "General Science & Tech": {
+      "icon": "🔬",
+      "topics": [
+        "Space Technology: ISRO programs, satellites, launch vehicles",
+        "Defense Tech: Missiles, stealth systems, nuclear energy program",
+        "Information Technology & AI: IoT, blockchain, cybersecurity, quantum computing",
+        "Biotechnology & Health: Genetics, stem cells, vaccines, viral diseases",
+        "Basic Sciences: Physics, Chemistry, Biology concepts from everyday life"
+      ]
+    }
+  },
+  "💳 Bank Exams (IBPS / SBI PO & Clerk)": {
+    "Quantitative Aptitude": {
+      "icon": "📊",
+      "topics": [
+        "Data Interpretation: Tables, Bar graphs, Line charts, Pie charts, Caselet DI",
+        "Number Series: Missing and Wrong number series patterns",
+        "Simplification & Approximation: BODMAS, indices, surds, calculations",
+        "Arithmetic Word Problems: Percentages, Profit/Loss, SI/CI, Ratio/Proportion",
+        "Work & Time: Pipe/Cistern, Time-Speed-Distance, Train and Boat problems",
+        "Quadratic Equations: Factorization, inequalities comparison"
+      ]
+    },
+    "Reasoning Ability": {
+      "icon": "🧠",
+      "topics": [
+        "Puzzles & Seating Arrangements: Linear, Circular, Box, Floor, Matrix grids",
+        "Syllogisms: Statements and conclusions, 'only a few' concepts",
+        "Inequalities: Direct and coded mathematical comparisons",
+        "Blood Relations: Family trees, coded blood relations",
+        "Direction & Distance: Path tracing, coded directions",
+        "Coding-Decoding: Chinese coding, machine input-output flow"
+      ]
+    },
+    "English Language": {
+      "icon": "📝",
+      "topics": [
+        "Reading Comprehension: Tone, main idea, vocabulary, inference",
+        "Cloze Test & Fillers: Contextual vocabulary selection",
+        "Error Spotting & Sentence Correction: Subject-verb agreement, tenses, prepositions",
+        "Parajumbles: Reordering sentences into a coherent paragraph"
+      ]
+    },
+    "General & Banking Awareness": {
+      "icon": "🏦",
+      "topics": [
+        "Financial & Banking Terms: NPA, Inflation, Monetary tools, BASEL norms",
+        "RBI Functions: Currency issuance, monetary controller, banking regulations",
+        "Current Financial Affairs: Union Budget, Economic Survey, banking mergers",
+        "General Current Affairs: National events, summits, sports, awards, appointments"
+      ]
+    }
+  },
+  "💼 SSC CGL Exam": {
+    "Quantitative Aptitude": {
+      "icon": "🧮",
+      "topics": [
+        "Number System: Divisibility, remainders, LCM & HCF",
+        "Algebra: Identities, linear and quadratic equations, graphs",
+        "Geometry: Triangles, circles, quadrilaterals, congruence and similarity",
+        "Trigonometry: Ratios, identities, heights and distances",
+        "Mensuration: Area, perimeter, volume of 2D/3D shapes",
+        "Arithmetic: Average, Speed-Time, Interest, Profit/Loss, Partnership"
+      ]
+    },
+    "General Intelligence & Reasoning": {
+      "icon": "🧩",
+      "topics": [
+        "Analogies & Classifications: Semantic, Symbolic, Figural",
+        "Series Completion: Number, Alphabetical, Alphanumeric",
+        "Non-Verbal Reasoning: Mirror images, water images, paper folding, embedded figures",
+        "Venn Diagrams & Syllogism: Set relationships and logical deductions",
+        "Decision Making & Coding: Coded operations, ranking, blood relations"
+      ]
+    },
+    "General Awareness": {
+      "icon": "🌐",
+      "topics": [
+        "History: Indian Freedom struggle, ancient dynasties, medieval conquests",
+        "Polity: Articles, Amendments, Parliament structure, executive powers",
+        "Geography: Rivers, mountains, soil types, climate of India",
+        "General Science: High-school level Physics, Chemistry, Biology basics",
+        "Static GK: Important books, dances, national parks, capitals & currencies"
+      ]
+    },
+    "English Comprehension": {
+      "icon": "📖",
+      "topics": [
+        "Vocabulary: Synonyms, Antonyms, One-word substitution, Idioms & Phrases",
+        "Grammar: Active/Passive voice, Direct/Indirect speech, Cloze test, Fillers",
+        "Comprehension & Ordering: Sentence improvement, reading passages, spelling errors"
+      ]
+    }
+  },
+  "👮 State Police SI & Constable": {
+    "General Knowledge & State GK": {
+      "icon": "🚨",
+      "topics": [
+        "State History & Geography: Local rivers, mountains, borders, district stats",
+        "State Administration: Police organization hierarchy, state symbols, local departments",
+        "Indian Constitution: Fundamental Rights, Duties, police-relevant clauses",
+        "Current Events: National, international, and state-level achievements"
+      ]
+    },
+    "Numerical & Mental Ability": {
+      "icon": "🔢",
+      "topics": [
+        "Arithmetic: Percentages, Profit and Loss, Simple interest, Averages",
+        "Tables & Graphs: Data representation, basic interpretation",
+        "Time & Distance: Basic train speed and work rates"
+      ]
+    },
+    "Reasoning & Mental Aptitude": {
+      "icon": "🔍",
+      "topics": [
+        "Public Interest & Crime Control: Police ethics, law and order concepts",
+        "Logical Diagrams: Venn relation, direction sense, coding",
+        "Analogies & Differences: Space visualization, pattern matching"
+      ]
+    },
+    "State Language (Hindi/Regional)": {
+      "icon": "🗣️",
+      "topics": [
+        "Grammar: Sandhi, Samas, synonyms, antonyms, sentence correction",
+        "Literature: Famous local authors, awards, idioms and proverbs"
+      ]
+    }
+  }
+}

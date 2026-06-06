@@ -1,0 +1,23 @@
+I want to create a personal website that help me for GATE exam and job prepratation. Main features are: 
+I am planining to integrate gemini api key so that it can do websearch and get more information about the specific topic and generate mcq questions for the specific topic and from GATE exam and other job exam papers. and it can do mock tests for the specific topic and the mock test should be in the form of 
+1. Single choice question with four options and correct answer and explanation.
+2. Multiple choice question with four options and correct answer and explanation.
+
+I am planing to add explantion section in which i give topic name it give all expaination about that topic i can any question.
+
+I need 3-4 secition of mcq like one is for aptitude and reasoning and other is for specific domain of computer scince which include data structure and algorithm, operating system, database management system, and computer network.  
+3rd one for english 
+4rd one for communication 
+
+
+in 3rd section i give me mcq question on english 
+but in 4th i take my interview i aske me to speck and help me to improve my communication skill and it can also generate me report of my progress.
+
+I want a completed guide website for computer science job and GATE examination both 
+also create a section where i see my gate syllabus and all topic which i need to cover and it also track my progress.   
+
+Note: when we go to genrative ai or send to llm model it generate same question after some time so you want to make sure generated question is always non reperatable 
+
+
+My steam is machine learning engineer so are a section where you are aksing me ml mcq so that i will never forget ml concept and topics.
+
