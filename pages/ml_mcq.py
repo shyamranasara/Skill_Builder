@@ -59,17 +59,15 @@ with st.sidebar:
         clear_topic_history(topic_label)
         st.success("Cleared!")
 
-Q_KEY = f"{PAGE}_queue"; IDX_KEY = f"{PAGE}_idx"; ANSWERED_KEY = f"{PAGE}_answered"
+Q_KEY = f"{PAGE}_queue"; ANSWERED_KEY = f"{PAGE}_answered"
 ANSWER_KEY = f"{PAGE}_user_ans"; TOPIC_KEY = f"{PAGE}_ltopic"; DIFF_KEY = f"{PAGE}_ldiff"; TYPE_KEY = f"{PAGE}_ltype"
 
 def _queue():   return st.session_state.get(Q_KEY, [])
-def _idx():     return st.session_state.get(IDX_KEY, 0)
-def _current(): q = _queue(); i = _idx(); return q[i] if q and i < len(q) else None
 
 if (st.session_state.get(TOPIC_KEY) != topic_label or
         st.session_state.get(DIFF_KEY) != difficulty or
         st.session_state.get(TYPE_KEY) != q_type_val):
-    for k in [Q_KEY, IDX_KEY, ANSWERED_KEY, ANSWER_KEY]:
+    for k in [Q_KEY, ANSWERED_KEY, ANSWER_KEY]:
         st.session_state.pop(k, None)
     st.session_state.update({TOPIC_KEY: topic_label, DIFF_KEY: difficulty, TYPE_KEY: q_type_val})
 
@@ -80,65 +78,87 @@ if not queue:
     gen_col, _ = st.columns([2, 3])
     with gen_col:
         if st.button(f"🎯 Generate {BATCH_SIZE} Questions", use_container_width=True, type="primary"):
-            with st.spinner(f"Generating {BATCH_SIZE} ML questions..."):
+            with st.spinner(f"Generating {BATCH_SIZE} questions..."):
                 qs, err = generate_mcq_set(topic, difficulty, q_type_val, count=BATCH_SIZE)
             if err:
                 st.error(f"❌ {err}")
             elif qs:
-                st.session_state.update({Q_KEY: qs, IDX_KEY: 0, ANSWERED_KEY: False, ANSWER_KEY: None})
+                st.session_state.update({Q_KEY: qs, ANSWERED_KEY: False, ANSWER_KEY: {}})
                 st.rerun()
     st.markdown("<div style='text-align:center;color:#4B5563;padding:2rem;'><p style='font-size:1.1rem;'>👆 Click to load 20 questions</p></div>", unsafe_allow_html=True)
 else:
-    idx = _idx(); total = len(queue)
-    st.markdown(f"""
-    <div style='display:flex;align-items:center;gap:1rem;margin-bottom:0.8rem;'>
-    <span style='color:#8B5CF6;font-weight:700;font-size:1rem;'>Q {idx+1} / {total}</span>
-    <div style='flex:1;background:#2D2D4A;border-radius:4px;height:8px;'>
-    <div style='background:linear-gradient(90deg,#8B5CF6,#EC4899);width:{idx/total*100:.0f}%;height:8px;border-radius:4px;'></div>
-    </div>
-    <span style='color:#6B7280;font-size:0.82rem;'>{topic_label[:25]}</span>
-    </div>""", unsafe_allow_html=True)
+    total = len(queue)
+    submitted = st.session_state.get(ANSWERED_KEY, False)
+    saved_answers = st.session_state.get(ANSWER_KEY, {})
 
-    q = _current()
-    if q is None:
-        st.info("✅ All questions completed!")
-        if st.button("🔄 Generate New Set", type="primary"):
-            st.session_state[Q_KEY] = []; st.rerun()
-    else:
+    if submitted:
+        correct_count = 0
+        for idx, q in enumerate(queue):
+            ans = saved_answers.get(idx)
+            correct = q.get("correct", [])
+            is_correct = False
+            if ans:
+                if isinstance(ans, list):
+                    is_correct = sorted(ans) == sorted(correct)
+                else:
+                    is_correct = ans in correct
+            if is_correct:
+                correct_count += 1
+        
+        st.markdown("### 🏆 Exam Results")
+        render_score_badge(correct_count, total)
+        st.markdown("---")
+
+    user_answers = {}
+    for idx, q in enumerate(queue):
+        st.markdown(f"#### 📝 Question {idx+1} of {total}")
         st.markdown(f"<span style='background:#2D2D4A;color:#8B5CF6;padding:4px 12px;border-radius:20px;font-size:0.8rem;'>🏷️ {q.get('keyword','')}</span>", unsafe_allow_html=True)
         st.markdown("")
-        user_answer = render_question_card(q, key_prefix=f"{PAGE}_q{idx}")
 
-        c1, c2, c3, _ = st.columns([1, 1, 1, 2])
-        with c1:
-            if not st.session_state.get(ANSWERED_KEY, False):
-                if st.button("✅ Submit", use_container_width=True, type="primary"):
-                    if user_answer:
-                        is_correct = render_feedback(q, user_answer)
-                        save_hash(topic_label, get_question_hash(q["question"], q["correct"]), q.get("keyword", ""))
-                        record_answer(topic_label, is_correct)
-                        st.session_state.update({ANSWERED_KEY: True, ANSWER_KEY: user_answer})
-                    else:
-                        st.warning("Please select an answer first.")
-            else:
-                render_feedback(q, st.session_state[ANSWER_KEY])
+        prev_ans = saved_answers.get(idx)
+        ans = render_question_card(q, key_prefix=f"{PAGE}_q{idx}", disabled=submitted, default_val=prev_ans)
+        user_answers[idx] = ans
 
-        with c2:
-            if st.session_state.get(ANSWERED_KEY, False):
-                is_last = idx >= total - 1
-                if st.button("🔄 New Set" if is_last else f"Next → Q{idx+2}/{total}", use_container_width=True):
-                    if is_last:
-                        st.session_state[Q_KEY] = []; st.session_state[IDX_KEY] = 0
-                    else:
-                        st.session_state[IDX_KEY] = idx + 1
-                    st.session_state.update({ANSWERED_KEY: False, ANSWER_KEY: None})
-                    st.rerun()
+        if submitted:
+            render_feedback(q, prev_ans)
+        
+        st.markdown("<div style='margin-bottom:2rem;'></div>", unsafe_allow_html=True)
 
-        with c3:
-            if st.button("⚡ New Set Now", use_container_width=True):
-                st.session_state[Q_KEY] = []; st.session_state[IDX_KEY] = 0
-                st.session_state.update({ANSWERED_KEY: False, ANSWER_KEY: None}); st.rerun()
-
-s = get_topic_score(topic_label)
-if s["total"] > 0:
-    st.markdown("---"); render_score_badge(s["correct"], s["total"])
+    st.markdown("---")
+    submit_col, reset_col = st.columns(2)
+    
+    if not submitted:
+        with submit_col:
+            if st.button("📝 Submit Exam", type="primary", use_container_width=True):
+                for idx, q in enumerate(queue):
+                    ans = user_answers[idx]
+                    correct = q.get("correct", [])
+                    is_correct = False
+                    if ans:
+                        if isinstance(ans, list):
+                            is_correct = sorted(ans) == sorted(correct)
+                        else:
+                            is_correct = ans in correct
+                    
+                    h = get_question_hash(q["question"], q["correct"])
+                    save_hash(topic_label, h, q.get("keyword", ""))
+                    record_answer(topic_label, is_correct)
+                
+                st.session_state[ANSWER_KEY] = user_answers
+                st.session_state[ANSWERED_KEY] = True
+                st.rerun()
+        with reset_col:
+            if st.button("🗑️ Discard & Load New Set", use_container_width=True):
+                st.session_state[Q_KEY] = []
+                st.session_state[ANSWERED_KEY] = False
+                st.session_state[ANSWER_KEY] = {}
+                st.rerun()
+    else:
+        with submit_col:
+            st.info("Exam submitted! Answers and explanations are shown under each question.")
+        with reset_col:
+            if st.button("🔄 Generate New Exam Set", type="primary", use_container_width=True):
+                st.session_state[Q_KEY] = []
+                st.session_state[ANSWERED_KEY] = False
+                st.session_state[ANSWER_KEY] = {}
+                st.rerun()

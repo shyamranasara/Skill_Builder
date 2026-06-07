@@ -99,7 +99,7 @@ def validate_mcq(mcq: dict) -> tuple[bool, str]:
 # Rendering
 # ─────────────────────────────────────────────
 
-def render_question_card(q: dict, key_prefix: str = "mcq") -> str | list | None:
+def render_question_card(q: dict, key_prefix: str = "mcq", disabled: bool = False, default_val=None) -> str | list | None:
     """
     Render an MCQ question with options as a Streamlit card.
     Returns the user's selected answer(s) or None if not answered.
@@ -121,16 +121,27 @@ def render_question_card(q: dict, key_prefix: str = "mcq") -> str | list | None:
         st.caption("🔘 Select **all** correct answers:")
         selected = []
         for opt in options:
-            if st.checkbox(opt, key=f"{key_prefix}_{opt[:10]}"):
+            is_checked = False
+            if default_val and opt[0] in default_val:
+                is_checked = True
+            if st.checkbox(opt, key=f"{key_prefix}_{opt[:10]}", value=is_checked, disabled=disabled):
                 selected.append(opt[0])  # letter only: "A", "B", etc.
         return selected if selected else None
     else:
         st.caption("🔘 Select one answer:")
+        default_index = None
+        if default_val:
+            for o_idx, opt in enumerate(options):
+                if opt.startswith(default_val):
+                    default_index = o_idx
+                    break
         answer = st.radio(
             "Your answer:",
             options,
             key=f"{key_prefix}_radio",
             label_visibility="collapsed",
+            index=default_index,
+            disabled=disabled,
         )
         if answer:
             return answer[0]  # return letter "A", "B", etc.

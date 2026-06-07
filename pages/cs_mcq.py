@@ -73,7 +73,6 @@ with st.sidebar:
 
 # ── Session state keys ─────────────────────────────────────────────────────────
 Q_KEY       = f"{PAGE}_queue"
-IDX_KEY     = f"{PAGE}_idx"
 ANSWERED_KEY= f"{PAGE}_answered"
 ANSWER_KEY  = f"{PAGE}_user_ans"
 TOPIC_KEY   = f"{PAGE}_loaded_topic"
@@ -81,17 +80,14 @@ DIFF_KEY    = f"{PAGE}_loaded_diff"
 TYPE_KEY    = f"{PAGE}_loaded_type"
 
 def _queue():   return st.session_state.get(Q_KEY, [])
-def _idx():     return st.session_state.get(IDX_KEY, 0)
-def _current(): q = _queue(); i = _idx(); return q[i] if q and i < len(q) else None
 
 # ── Detect settings change — reset queue ──────────────────────────────────────
 if (st.session_state.get(TOPIC_KEY) != topic_label or
         st.session_state.get(DIFF_KEY) != difficulty or
         st.session_state.get(TYPE_KEY) != q_type_val):
     st.session_state[Q_KEY] = []
-    st.session_state[IDX_KEY] = 0
     st.session_state[ANSWERED_KEY] = False
-    st.session_state[ANSWER_KEY] = None
+    st.session_state[ANSWER_KEY] = {}
     st.session_state[TOPIC_KEY] = topic_label
     st.session_state[DIFF_KEY] = difficulty
     st.session_state[TYPE_KEY] = q_type_val
@@ -112,88 +108,97 @@ if not queue:
                 st.error(f"❌ {err}")
             elif qs:
                 st.session_state[Q_KEY] = qs
-                st.session_state[IDX_KEY] = 0
                 st.session_state[ANSWERED_KEY] = False
-                st.session_state[ANSWER_KEY] = None
+                st.session_state[ANSWER_KEY] = {}
                 st.rerun()
     st.markdown("""<div style='text-align:center;color:#4B5563;padding:2rem;'>
     <p style='font-size:1.1rem;'>👆 Click to load 20 questions in one go</p>
     <p style='font-size:0.85rem;'>19× more token-efficient than generating one at a time</p>
     </div>""", unsafe_allow_html=True)
 else:
-    queue = _queue()
-    idx   = _idx()
     total = len(queue)
+    submitted = st.session_state.get(ANSWERED_KEY, False)
+    saved_answers = st.session_state.get(ANSWER_KEY, {})
 
-    # Progress bar
-    prog_pct = (idx) / total
-    st.markdown(f"""
-    <div style='display:flex;align-items:center;gap:1rem;margin-bottom:0.8rem;'>
-    <span style='color:#A78BFA;font-weight:700;font-size:1rem;white-space:nowrap;'>Q {idx+1} / {total}</span>
-    <div style='flex:1;background:#2D2D4A;border-radius:4px;height:8px;'>
-    <div style='background:linear-gradient(90deg,#6C63FF,#06B6D4);width:{prog_pct*100:.0f}%;height:8px;border-radius:4px;transition:width 0.3s;'></div>
-    </div>
-    <span style='color:#6B7280;font-size:0.82rem;white-space:nowrap;'>{topic_label[:25]}</span>
-    </div>
-    """, unsafe_allow_html=True)
+    # If exam has been submitted, show final score summary at the top
+    if submitted:
+        # Calculate score
+        correct_count = 0
+        for idx, q in enumerate(queue):
+            ans = saved_answers.get(idx)
+            correct = q.get("correct", [])
+            is_correct = False
+            if ans:
+                if isinstance(ans, list):
+                    is_correct = sorted(ans) == sorted(correct)
+                else:
+                    is_correct = ans in correct
+            if is_correct:
+                correct_count += 1
+        
+        st.markdown("### 🏆 Exam Results")
+        render_score_badge(correct_count, total)
+        st.markdown("---")
 
-    q = _current()
-    if q is None:
-        st.info("All questions completed!")
-        if st.button("🔄 Generate New Set", type="primary"):
-            st.session_state[Q_KEY] = []
-            st.rerun()
-    else:
-        # Keyword tag
+    # Render all questions
+    user_answers = {}
+    for idx, q in enumerate(queue):
+        st.markdown(f"#### 📝 Question {idx+1} of {total}")
         st.markdown(
             f"<span style='background:#2D2D4A;color:#A78BFA;padding:4px 12px;border-radius:20px;font-size:0.8rem;'>🏷️ {q.get('keyword','')}</span>",
             unsafe_allow_html=True
         )
         st.markdown("")
 
-        user_answer = render_question_card(q, key_prefix=f"{PAGE}_q{idx}")
+        prev_ans = saved_answers.get(idx)
+        ans = render_question_card(q, key_prefix=f"{PAGE}_q{idx}", disabled=submitted, default_val=prev_ans)
+        user_answers[idx] = ans
 
-        submit_col, next_col, reset_col, _ = st.columns([1, 1, 1, 2])
+        if submitted:
+            # Show feedback right below the card
+            render_feedback(q, prev_ans)
+        
+        st.markdown("<div style='margin-bottom:2rem;'></div>", unsafe_allow_html=True)
 
-        with submit_col:
-            if not st.session_state.get(ANSWERED_KEY, False):
-                if st.button("✅ Submit", use_container_width=True, type="primary"):
-                    if user_answer:
-                        is_correct = render_feedback(q, user_answer)
-                        h = get_question_hash(q["question"], q["correct"])
-                        save_hash(topic_label, h, q.get("keyword", ""))
-                        record_answer(topic_label, is_correct)
-                        st.session_state[ANSWERED_KEY] = True
-                        st.session_state[ANSWER_KEY] = user_answer
-                    else:
-                        st.warning("Please select an answer first.")
-            else:
-                render_feedback(q, st.session_state[ANSWER_KEY])
-
-        with next_col:
-            if st.session_state.get(ANSWERED_KEY, False):
-                is_last = (idx >= total - 1)
-                btn_label = "🔄 New Set" if is_last else f"Next → (Q{idx+2}/{total})"
-                if st.button(btn_label, use_container_width=True):
-                    if is_last:
-                        st.session_state[Q_KEY] = []
-                        st.session_state[IDX_KEY] = 0
-                    else:
-                        st.session_state[IDX_KEY] = idx + 1
-                    st.session_state[ANSWERED_KEY] = False
-                    st.session_state[ANSWER_KEY] = None
-                    st.rerun()
-
-        with reset_col:
-            if st.button("⚡ New Set Now", use_container_width=True):
-                st.session_state[Q_KEY] = []
-                st.session_state[IDX_KEY] = 0
-                st.session_state[ANSWERED_KEY] = False
-                st.session_state[ANSWER_KEY] = None
-                st.rerun()
-
-# ── Score Summary ──────────────────────────────────────────────────────────────
-s = get_topic_score(topic_label)
-if s["total"] > 0:
     st.markdown("---")
-    render_score_badge(s["correct"], s["total"])
+    
+    # Bottom buttons
+    submit_col, reset_col = st.columns(2)
+    
+    if not submitted:
+        with submit_col:
+            if st.button("📝 Submit Exam", type="primary", use_container_width=True):
+                # Calculate correctness and save
+                for idx, q in enumerate(queue):
+                    ans = user_answers[idx]
+                    correct = q.get("correct", [])
+                    is_correct = False
+                    if ans:
+                        if isinstance(ans, list):
+                            is_correct = sorted(ans) == sorted(correct)
+                        else:
+                            is_correct = ans in correct
+                    
+                    # Record performance metrics
+                    h = get_question_hash(q["question"], q["correct"])
+                    save_hash(topic_label, h, q.get("keyword", ""))
+                    record_answer(topic_label, is_correct)
+                
+                st.session_state[ANSWER_KEY] = user_answers
+                st.session_state[ANSWERED_KEY] = True
+                st.rerun()
+        with reset_col:
+            if st.button("🗑️ Discard & Load New Set", use_container_width=True):
+                st.session_state[Q_KEY] = []
+                st.session_state[ANSWERED_KEY] = False
+                st.session_state[ANSWER_KEY] = {}
+                st.rerun()
+    else:
+        with submit_col:
+            st.info("Exam submitted! Answers and explanations are shown under each question.")
+        with reset_col:
+            if st.button("🔄 Generate New Exam Set", type="primary", use_container_width=True):
+                st.session_state[Q_KEY] = []
+                st.session_state[ANSWERED_KEY] = False
+                st.session_state[ANSWER_KEY] = {}
+                st.rerun()
