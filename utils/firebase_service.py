@@ -7,6 +7,7 @@ Falls back to local session_state when unauthenticated.
 import streamlit as st
 from datetime import date, datetime
 import logging
+import threading
 
 log = logging.getLogger("firebase_service")
 
@@ -25,19 +26,23 @@ def get_db():
 
 
 def save_to_firestore(uid: str, field_name: str, value) -> None:
-    """Save a specific field to the user's Firestore document."""
-    db = get_db()
-    if not db:
-        return
-    try:
-        doc_ref = db.collection("users").document(uid)
-        doc_ref.set({field_name: value}, merge=True)
-    except Exception as e:
-        log.error(f"Error saving {field_name} to Firestore: {e}")
+    """Save a specific field to the user's Firestore document asynchronously."""
+    def _write():
+        db = get_db()
+        if not db:
+            return
+        try:
+            doc_ref = db.collection("users").document(uid)
+            doc_ref.set({field_name: value}, merge=True)
+            log.info(f"Async save of {field_name} completed.")
+        except Exception as e:
+            log.error(f"Error saving {field_name} to Firestore asynchronously: {e}")
+
+    threading.Thread(target=_write, daemon=True).start()
 
 
 def log_page_visit(page_name: str) -> None:
-    """Track user page views and active durations in Firestore."""
+    """Track user page views and active durations in Firestore asynchronously with page change deduplication."""
     _init_state()
     user = st.session_state.get("user")
     if not user or not user.get("uid"):
@@ -51,14 +56,25 @@ def log_page_visit(page_name: str) -> None:
     prev_page = st.session_state.get("telemetry_current_page")
     prev_start = st.session_state.get("telemetry_page_start")
 
-    db = get_db()
-    if db:
+    # Optimization: Only log if the page actually changed (reduces redundant writes on rerun)
+    if prev_page == page_name:
+        return
+
+    # Update local state immediately for next calculation
+    st.session_state["telemetry_current_page"] = page_name
+    st.session_state["telemetry_page_start"] = now
+
+    def _write_telemetry():
+        db = get_db()
+        if not db:
+            return
         try:
             # 1. Log previous page duration if it exists and wasn't too long ago (< 1 hour)
             if prev_page and prev_start:
-                if isinstance(prev_start, str):
-                    prev_start = datetime.fromisoformat(prev_start)
-                duration = int((now - prev_start).total_seconds())
+                start_dt = prev_start
+                if isinstance(start_dt, str):
+                    start_dt = datetime.fromisoformat(start_dt)
+                duration = int((now - start_dt).total_seconds())
                 if 0 < duration < 3600:
                     db.collection("telemetry").add({
                         "uid": uid,
@@ -66,7 +82,7 @@ def log_page_visit(page_name: str) -> None:
                         "page": prev_page,
                         "event_type": "page_duration",
                         "duration_seconds": duration,
-                        "timestamp": prev_start.isoformat(),
+                        "timestamp": start_dt.isoformat(),
                     })
             
             # 2. Log current page view event
@@ -77,12 +93,12 @@ def log_page_visit(page_name: str) -> None:
                 "event_type": "page_view",
                 "timestamp": now.isoformat(),
             })
+            log.info(f"Async telemetry log for page '{page_name}' completed.")
         except Exception as e:
-            log.error(f"Telemetry logging failed: {e}")
+            log.error(f"Telemetry logging failed asynchronously: {e}")
 
-    # Update state for next calculation
-    st.session_state["telemetry_current_page"] = page_name
-    st.session_state["telemetry_page_start"] = now
+    threading.Thread(target=_write_telemetry, daemon=True).start()
+
 
 
 def sync_firestore_to_local(uid: str) -> None:
@@ -240,6 +256,33 @@ def record_answer(topic: str, is_correct: bool) -> None:
     if user and user.get("uid"):
         save_to_firestore(user["uid"], "session_scores", st.session_state.session_scores)
         save_to_firestore(user["uid"], "daily_activity", st.session_state.daily_activity)
+
+
+def record_answers_batch(topic: str, results: list[bool]) -> None:
+    """Record multiple question answers in a single batch, updating Firestore once."""
+    _init_state()
+    if not results:
+        return
+
+    if topic not in st.session_state.session_scores:
+        st.session_state.session_scores[topic] = {"correct": 0, "total": 0}
+
+    for is_correct in results:
+        st.session_state.session_scores[topic]["total"] += 1
+        if is_correct:
+            st.session_state.session_scores[topic]["correct"] += 1
+
+    # Track daily activity
+    today = str(date.today())
+    st.session_state.daily_activity[today] = (
+        st.session_state.daily_activity.get(today, 0) + len(results)
+    )
+
+    user = st.session_state.get("user")
+    if user and user.get("uid"):
+        save_to_firestore(user["uid"], "session_scores", st.session_state.session_scores)
+        save_to_firestore(user["uid"], "daily_activity", st.session_state.daily_activity)
+
 
 
 def get_topic_score(topic: str) -> dict:

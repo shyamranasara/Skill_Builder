@@ -9,7 +9,7 @@ from pathlib import Path
 from utils.gemini_service import generate_mcq_set, is_api_configured
 from utils.question_hash import save_hash, get_question_hash, get_total_seen, clear_topic_history
 from utils.mcq_helper import render_question_card, render_feedback, render_score_badge
-from utils.firebase_service import record_answer, get_topic_score, log_page_visit
+from utils.firebase_service import record_answers_batch, get_topic_score, log_page_visit
 
 PAGE = "govt"
 BATCH_SIZE = 20
@@ -172,6 +172,7 @@ else:
     if not submitted:
         with submit_col:
             if st.button("📝 Submit Exam", type="primary", use_container_width=True):
+                results = []
                 for idx, q in enumerate(queue):
                     ans = user_answers[idx]
                     correct = q.get("correct", [])
@@ -182,9 +183,11 @@ else:
                         else:
                             is_correct = ans in correct
                     
+                    results.append(is_correct)
                     h = get_question_hash(q["question"], q["correct"])
                     save_hash(topic_query, h, q.get("keyword", ""))
-                    record_answer(topic_query, is_correct)
+                
+                record_answers_batch(topic_query, results)
                 
                 st.session_state[ANSWER_KEY] = user_answers
                 st.session_state[ANSWERED_KEY] = True
